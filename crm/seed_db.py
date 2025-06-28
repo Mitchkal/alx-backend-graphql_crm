@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""
+Command to seed the database with initial Customers, Products, and Orders
+"""
 from django.core.management.base import BaseCommand
 from crm.models import Customer, Product, Order
 from django.db import transaction

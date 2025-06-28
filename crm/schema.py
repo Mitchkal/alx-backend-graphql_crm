@@ -1,4 +1,4 @@
-#!/usr//bin/env python3
+#!/usr/bin/env python3
 """
 mutation classes
 """
@@ -102,7 +102,7 @@ class CreateCustomer(graphene.Mutation):
 
         # for email uniqueness
         if Customer.objects.filter(email=email):
-            raise GraphQLError("A customer with the same email already exists.")
+            raise GraphQLError("Customer with the same email already exists.")
 
         # for phone validation if provided
         if phone and not re.match(r"^(\+?\d{7,15}|\d{3}-\d{3}-\d{4})$", phone):
@@ -153,7 +153,7 @@ class BulkCreateCustomers(graphene.Mutation):
             # Validate email uniqueness
             if Customer.objects.filter(email=email).exists():
                 errors.append(
-                    f"[{index}] A customer with email '{email}' already esists."
+                    f"[{index}] Customer with email '{email}' already esists."
                 )
                 continue
 
@@ -247,7 +247,7 @@ class CreateProduct(graphene.Mutation):
             raise GraphQLError("Stock cannot be negative.")
         # # Validate uniqueness of product name
         # if Product.objects.filter(name=name).exists():
-        #     raise GraphQLError(f"A product with the bame '{name}; already exists.")
+        #     raise GraphQLError(f"A product with the name exists")
 
         product = Product(name=name, price=price, stock=stock)
 
@@ -342,9 +342,9 @@ class CreateOrder(graphene.Mutation):
         customer_id = input.customer_id
         product_ids = input.product_ids
         if len(product_ids) == 0:
-            raise GraphQLError("At least one product must be included in the order.")
+            raise GraphQLError("At least one product must be included")
         if not Customer.objects.filter(id=customer_id).exists():
-            raise GraphQLError(f"Customer with id '{customer_id}' does not exist.")
+            raise GraphQLError(f"Customer '{customer_id}' does not exist.")
 
         products = Product.objects.filter(id__in=product_ids)
         if len(products) != len(product_ids):
@@ -398,23 +398,6 @@ class Query(ObjectType):
         returns greeting wehen called
         """
         return "Hello, GraphQl!"
-
-    # def resolve_filtered_customers(root, info, filters=None):
-    #     """
-    #     resolves filtered customers
-    #     """
-    #     from django.db.models import Q
-
-    #     queryset = Customer.objects.all()
-
-    #     if filters:
-    #         if filters.email_contains:
-    #             queryset = queryset.filter(email__icontains=filters.email_contains)
-    #         if filters.created_after:
-    #             queryset = queryset.filter(created_at__gte=filters.created_after)
-    #         if filters.created_before:
-    #             queryset = queryset.filter(created_at__lte=filters.created_before)
-    #     return queryset
 
 
 # register mutation
