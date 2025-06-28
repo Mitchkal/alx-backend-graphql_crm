@@ -4,18 +4,27 @@ modulw for query schema
 """
 from graphene import ObjectType, String, Schema
 
+from crm.schema import Query as CRMQuery, Mutation as CRMMutation
 
-class Query(ObjectType):
+
+class Query(CRMQuery, ObjectType):
     """
-    query class
+    Query class that combines CRM queries
     """
-    hello = String()
 
-    def resolve_hello(parent, info):
-        """
-        returns greeting wehen called
-        """
-        return "Hello, GraphQl!"
+    pass
+
+    # hello = String()
+
+    # def resolve_hello(parent, info):
+    #     """
+    #     Returns a greeting when called
+    #     """
+    #     return "Hello, GraphQL!"
 
 
-schema = Schema(query=Query)
+class Mutation(CRMMutation, ObjectType):
+    pass
+
+
+schema = Schema(query=Query, mutation=Mutation)
