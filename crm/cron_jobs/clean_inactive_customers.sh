@@ -3,12 +3,16 @@
 # command to delete
 # customers with no order 
 # since a year ago
-# if
-# else
-# DIR
-# cd
-# exit
+# and log the count of deleted customers
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$DIR/../.." || exit
 
+if [-f "myenv/bin/activate"]; then
+    source myenv/bin/activate
+else
+    echo "Virtual environment not found. Please create it first."
+    exit 1
+fi
 # calculate date one year ago
 DATE_THRESHOLD=$(date -d "1 year ago" +%Y-%m-%d)
 
