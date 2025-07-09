@@ -4,6 +4,7 @@
 # customers with no order 
 # since a year ago
 # and log the count of deleted customers
+# cwd
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR/../.." || exit
 
