@@ -3,6 +3,11 @@
 # command to delete
 # customers with no order 
 # since a year ago
+# if
+# else
+# DIR
+# cd
+# exit
 
 # calculate date one year ago
 DATE_THRESHOLD=$(date -d "1 year ago" +%Y-%m-%d)
