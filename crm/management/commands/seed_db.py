@@ -46,5 +46,5 @@ class Command(BaseCommand):
             customer = random.choice(self.customers)
             selected_products = random.sample(self.products, k=random.randint(1, 3))
             total_price = sum(p.price for p in selected_products)
-            order = Order.objects.create(customer=customer, total_price=total_price)
-            order.products.set(selected_products)
+            order = Order.objects.create(customer=customer, total_amount=total_price)
+            order.product.set(selected_products)

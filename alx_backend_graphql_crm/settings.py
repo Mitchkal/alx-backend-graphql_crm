@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "crm",
     "faker",
     "django_filters",
+    "gql",
+    "aiohttp",
 ]
 
 MIDDLEWARE = [
