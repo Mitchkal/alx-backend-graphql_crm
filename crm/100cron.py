@@ -5,7 +5,7 @@ logs message that CRM is alive to
 """
 import logging
 from gql import gql, Client
-from gql.transport.requests import RequestsHTTPTransport
+from gql.transport.aiohttp import AIOHTTPTransport
 
 
 def log_crm_heartbeat():
@@ -31,11 +31,7 @@ def log_crm_heartbeat():
             print(f"Error setting up logging: {e}")
     # Define transport with graphql endpoint
 
-    transport = RequestsHTTPTransport(
-        url="http://localhost:8000/graphql",
-        verify=False,
-        retries=3,
-    )
+    transport = AIOHTTPTransport(url="http://localhost:8000/graphql")
 
     # Create graphql client with defined transport
     client = Client(transport=transport, fetch_schema_from_transport=True)

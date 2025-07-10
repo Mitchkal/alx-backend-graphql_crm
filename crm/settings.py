@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     "gql",
     "aiohttp",
     "django_crontab",
-    "requests",
 ]
 
 MIDDLEWARE = [
