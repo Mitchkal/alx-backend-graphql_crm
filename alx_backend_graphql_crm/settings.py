@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django_filters",
     "gql",
     "aiohttp",
+    "django_crontab",
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,11 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+CRONJOBS = [
+    ("*/5 * * * *", "crm.cron.log_crm_heartbeat"),
+    ("* * * * *", "crm.cron.log_crm_heartbeat"),
+]
 
 
 # Static files (CSS, JavaScript, Images)
