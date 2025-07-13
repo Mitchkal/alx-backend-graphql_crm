@@ -260,6 +260,57 @@ class CreateProduct(graphene.Mutation):
         )
 
 
+class UpdateLowStockProducts(graphene.Mutation):
+    """
+    Mutation class that queries products with stock <10
+    and increments the stock by ten to simulate restocking
+    then returns a list of updated products and success message
+    """
+
+    class Arguments:
+        """
+        input arguments for the mutation
+        """
+
+        increment = graphene.Int(required=False, default_value=10)
+        input = ProductInput(required=False)
+
+    # attributes to return
+    updated_products = graphene.List(ProductType)
+    new_stock_level = graphene.Int()
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    @classmethod
+    def mutate(cls, root, info, increment, input=None):
+        """
+        query product with stock less than 10 and increment
+        also return the new stock level
+        """
+        from django.db import transaction
+
+        products = Product.objects.filter(stock__lt=10)
+        if not products.exists():
+            raise GraphQLError("No products with low stock found.")
+        updated_products = []
+        try:
+            with transaction.atomic():
+                for prod in products:
+                    prod.stock += increment
+                    prod.save()
+                    updated_products.append(prod)
+
+        except Exception as e:
+            raise GraphQLError(f"Failed to update products: {e}")
+
+        return UpdateLowStockProducts(
+            updated_products=updated_products,
+            new_stock_level=sum(p.stock for p in updated_products),
+            success=True,
+            message=f"Successfully updated {len(updated_products)} products.",
+        )
+
+
 class OrderInput(graphene.InputObjectType):
     """
     Input object type for an order mutation
@@ -410,3 +461,5 @@ class Mutation(graphene.ObjectType):
     bulk_create_customers = BulkCreateCustomers.Field()
     create_product = CreateProduct.Field()
     create_order = CreateOrder.Field()
+    update_low_stock_products = UpdateLowStockProducts.Field()
+    update_low_stock_products = UpdateLowStockProducts.Field()

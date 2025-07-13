@@ -62,6 +62,63 @@ def log_crm_heartbeat():
         handler.close()
 
 
+def update_low_stock():
+    """
+    executes UpdateLowStockProducts mutation and logs updated product names and new
+    stock levels to /tmp/low_stock_updates_log.txt
+    """
+    # Configure logging
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    log_file = "/tmp/low_stock_products_updates_log.txt"
+
+    if not logger.handlers:
+        try:
+            handler = logging.FileHandler(log_file)
+            formatter = logging.Formatter(
+                "%(asctime)s $(message)s", datefmt="%d/%m/%Y-%H:%M:%S"
+            )
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
+        except Exception as e:
+            print(f"Error setting up logging: {e}")
+    # Define transport with graphql endpoiint
+    transport = RequestsHTTPTransport(
+        url="http://localhost:8000/graphql",
+        verify=False,
+        retries=3,
+    )
+    # creat client
+    client = Client(transport=transport)
+    query = gql(
+        """
+        mutation UpdateLowStockProducts {
+            updateLowStockProducts {
+                productName
+                newStockLevel
+                success
+                message
+            }
+        }
+       """
+    )
+    result = client.execute(query)
+    updates = result.get("updateLowStockProducts", [])
+    if updates:
+        for update in updates:
+            product_name = update.get("productName")
+            new_stock_level = update.get("newStockLevel")
+            logger.info(f"Product: {product_name}, New Stock Level: {new_stock_level}")
+    else:
+        logger.info("No low stock products found or updates.")
+
+    for handler in logger.handlers:
+        handler.flush()
+        handler.close()
+
+
 if __name__ == "__main__":
     log_crm_heartbeat()
     print("CRM heartbeat logged successfully!")
+    update_low_stock()
+    print("Low stock products updates logged successfully!")

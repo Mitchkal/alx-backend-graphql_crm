@@ -2,7 +2,7 @@
 """
 modulw for query schema
 """
-from graphene import ObjectType, String, Schema
+from graphene import ObjectType, Schema
 
 from crm.schema import Query as CRMQuery, Mutation as CRMMutation
 
@@ -27,4 +27,4 @@ class Mutation(CRMMutation, ObjectType):
     pass
 
 
-schema = Schema(query=Query, mutation=Mutation)
+schema = Schema(query=Query, mutation=CRMMutation)

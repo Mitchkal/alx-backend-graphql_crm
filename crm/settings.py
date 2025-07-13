@@ -25,7 +25,9 @@ SECRET_KEY = "django-insecure-^y#r*q)ry7p#3vw53s!-9%q=^&m7qkzv@=@$dkk81cwftjin3r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "172.19.172.21",
+]
 
 
 # Application definition
@@ -120,6 +122,7 @@ USE_TZ = True
 CRONJOBS = [
     ("*/5 * * * *", "crm.cron.log_crm_heartbeat"),
     ("* * * * *", "crm.cron.log_crm_heartbeat"),
+    ("0 */12 * * *", "crm.cron.update_low_stock"),
 ]
 
 
