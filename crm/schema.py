@@ -462,4 +462,3 @@ class Mutation(graphene.ObjectType):
     create_product = CreateProduct.Field()
     create_order = CreateOrder.Field()
     update_low_stock_products = UpdateLowStockProducts.Field()
-    update_low_stock_products = UpdateLowStockProducts.Field()
